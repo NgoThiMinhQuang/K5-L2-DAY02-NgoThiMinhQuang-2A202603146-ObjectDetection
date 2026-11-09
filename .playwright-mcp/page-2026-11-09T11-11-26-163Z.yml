@@ -1,0 +1,170 @@
+- generic [ref=f1e10]:
+  - banner [ref=f1e11]:
+    - generic [ref=f1e12]:
+      - img "CVAT Logo" [ref=f1e14]
+      - link "Projects" [ref=f1e15] [cursor=pointer]:
+        - /url: /projects?page=1
+      - link "Tasks" [ref=f1e17] [cursor=pointer]:
+        - /url: /tasks?page=1
+      - link "Jobs" [ref=f1e19] [cursor=pointer]:
+        - /url: /jobs?page=1
+      - link "Cloud Storages" [ref=f1e21] [cursor=pointer]:
+        - /url: /cloudstorages?page=1
+      - link "Requests" [ref=f1e23] [cursor=pointer]:
+        - /url: /requests?page=1
+      - link "Models" [ref=f1e25] [cursor=pointer]:
+        - /url: /models
+      - link "Analytics" [ref=f1e27] [cursor=pointer]:
+        - /url: /analytics
+    - generic [ref=f1e29]:
+      - link [ref=f1e30] [cursor=pointer]:
+        - /url: https://github.com/cvat-ai/cvat
+        - img "github" [ref=f1e32]
+      - link [ref=f1e35] [cursor=pointer]:
+        - /url: https://docs.cvat.ai/docs
+        - img "question-circle" [ref=f1e37]
+      - generic [ref=f1e41] [cursor=pointer]:
+        - img "user" [ref=f1e42]
+        - strong [ref=f1e48]: Ngngothimi ...
+        - img "caret-down" [ref=f1e49]
+  - main [ref=f1e52]:
+    - generic [ref=f1e55]:
+      - generic [ref=f1e56]:
+        - button "left Back to tasks" [ref=f1e58] [cursor=pointer]:
+          - img "left" [ref=f1e59]
+          - generic [ref=f1e62]: Back to tasks
+        - button "Actions more" [ref=f1e64] [cursor=pointer]:
+          - generic [ref=f1e65]: Actions
+          - img "more" [ref=f1e66]
+      - generic [ref=f1e69]:
+        - heading [level=4] [ref=f1e74]:
+          - text: ADAS_50_Images
+          - button "Edit" [ref=f1e75] [cursor=pointer]:
+            - button "edit" [ref=f1e76]
+        - generic [ref=f1e85]:
+          - generic [ref=f1e86]:
+            - generic [ref=f1e87]: "Task #2 Created by Ngngothiminhquang on November 9th 2026"
+            - generic [ref=f1e89]:
+              - text: Assigned to
+              - generic [ref=f1e91] [cursor=pointer]:
+                - combobox [ref=f1e93]
+                - generic: Select a user
+          - generic [ref=f1e95]:
+            - strong [ref=f1e97]: Task description
+            - button "Edit" [ref=f1e98] [cursor=pointer]
+          - generic [ref=f1e103]:
+            - strong [ref=f1e105]: Issue Tracker
+            - button "Edit" [ref=f1e107] [cursor=pointer]:
+              - button "edit" [ref=f1e108]
+          - generic [ref=f1e114]:
+            - tablist [ref=f1e115]:
+              - generic [ref=f1e117]:
+                - tab [ref=f1e119] [cursor=pointer]:
+                  - generic [ref=f1e120]:
+                    - img "edit" [ref=f1e121]
+                    - text: Raw
+                - tab [selected] [ref=f1e125] [cursor=pointer]:
+                  - generic [ref=f1e126]:
+                    - img "build" [ref=f1e127]
+                    - text: Constructor
+            - tabpanel "build Constructor" [ref=f1e132]:
+              - generic [ref=f1e133]:
+                - button "Add label plus-circle" [ref=f1e134] [cursor=pointer]:
+                  - generic [ref=f1e135]: Add label
+                  - img "plus-circle" [ref=f1e136]
+                - button "Setup skeleton plus-circle" [ref=f1e140] [cursor=pointer]:
+                  - generic [ref=f1e141]: Setup skeleton
+                  - img "plus-circle" [ref=f1e142]
+                - button "From model plus-circle" [ref=f1e146] [cursor=pointer]:
+                  - generic [ref=f1e147]: From model
+                  - img "plus-circle" [ref=f1e148]
+                - generic [ref=f1e152]:
+                  - generic [ref=f1e153]: car
+                  - button [ref=f1e154]:
+                    - img "edit" [ref=f1e155]
+                  - button [ref=f1e158]:
+                    - img "delete" [ref=f1e159]
+                - generic [ref=f1e162]:
+                  - generic [ref=f1e163]: truck
+                  - button [ref=f1e164]:
+                    - img "edit" [ref=f1e165]
+                  - button [ref=f1e168]:
+                    - img "delete" [ref=f1e169]
+                - generic [ref=f1e172]:
+                  - generic [ref=f1e173]: bus
+                  - button [ref=f1e174]:
+                    - img "edit" [ref=f1e175]
+                  - button [ref=f1e178]:
+                    - img "delete" [ref=f1e179]
+                - generic [ref=f1e182]:
+                  - generic [ref=f1e183]: van
+                  - button [ref=f1e184]:
+                    - img "edit" [ref=f1e185]
+                  - button [ref=f1e188]:
+                    - img "delete" [ref=f1e189]
+      - generic [ref=f1e192]:
+        - generic [ref=f1e194]:
+          - text: Jobs
+          - button "Select all" [ref=f1e196] [cursor=pointer]
+        - generic [ref=f1e198]:
+          - generic [ref=f1e199]:
+            - button "Sort by ordered-list" [ref=f1e200] [cursor=pointer]:
+              - generic [ref=f1e201]: Sort by
+              - img "ordered-list" [ref=f1e202]
+            - generic [ref=f1e205]:
+              - button "Quick filters filter" [ref=f1e206] [cursor=pointer]:
+                - generic [ref=f1e207]: Quick filters
+                - img "filter" [ref=f1e208]
+              - button "Filter filter" [ref=f1e211] [cursor=pointer]:
+                - generic [ref=f1e212]: Filter
+                - img "filter" [ref=f1e213]
+              - button "Clear filters" [ref=f1e216] [cursor=pointer]
+            - button [ref=f1e218] [cursor=pointer]:
+              - img "download" [ref=f1e220]
+          - button [ref=f1e224] [cursor=pointer]:
+            - img "plus" [ref=f1e226]
+      - generic [ref=f1e235]:
+        - generic [ref=f1e236]:
+          - generic [ref=f1e237]:
+            - generic [ref=f1e238]:
+              - 'link "Job #2" [ref=f1e240] [cursor=pointer]':
+                - /url: /tasks/2/jobs/2
+              - img "question-circle" [ref=f1e242]
+            - generic [ref=f1e246]: "Created: Nov 9th 2026 17:35"
+            - generic [ref=f1e248]: "Updated: Nov 9th 2026 17:47"
+          - generic [ref=f1e253]:
+            - generic [ref=f1e254]:
+              - generic [ref=f1e255]: "Assignee:"
+              - generic [ref=f1e258] [cursor=pointer]:
+                - combobox [ref=f1e260]
+                - generic: Select a user
+            - generic [ref=f1e261]:
+              - generic [ref=f1e262]: "Stage:"
+              - generic [ref=f1e265] [cursor=pointer]:
+                - combobox [ref=f1e267]
+                - generic "annotation" [ref=f1e268]
+            - generic [ref=f1e269]:
+              - generic [ref=f1e270]: "State:"
+              - generic [ref=f1e273] [cursor=pointer]:
+                - combobox [ref=f1e275]
+                - generic "in progress" [ref=f1e276]
+          - generic [ref=f1e279]:
+            - generic [ref=f1e280]: "Duration: 35 minutes"
+            - generic [ref=f1e286]:
+              - img "border" [ref=f1e287]
+              - text: "Frame count: 50 (100%)"
+            - generic [ref=f1e290]: "Frame range: 0-49"
+        - img "more" [ref=f1e296]
+      - list [ref=f1e301]:
+        - listitem "Previous Page" [ref=f1e302]:
+          - button [disabled] [ref=f1e303]:
+            - img "left" [ref=f1e304]
+        - listitem "1" [ref=f1e307] [cursor=pointer]
+        - listitem "Next Page" [ref=f1e309]:
+          - button [disabled] [ref=f1e310]:
+            - img "right" [ref=f1e311]
+        - listitem [ref=f1e314]:
+          - generic "Page Size" [ref=f1e315] [cursor=pointer]:
+            - generic [ref=f1e316]:
+              - combobox "Page Size" [ref=f1e318]
+              - generic "10 / page" [ref=f1e319]

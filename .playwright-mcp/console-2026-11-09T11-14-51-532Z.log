@@ -1,0 +1,16 @@
+[     509ms] [WARNING] The shortcut: tab of SWITCH_TOOLS_BLOCKER_STATE have conflicts with these shortcuts: NEXT_OBJECT @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     516ms] [WARNING] The shortcut: l of AUDIO_SWITCH_LOCK have conflicts with these shortcuts: SWITCH_LOCK @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     517ms] [WARNING] The shortcut: p of AUDIO_SWITCH_PINNED have conflicts with these shortcuts: SWITCH_PINNED @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     519ms] [WARNING] The shortcut: h of AUDIO_SWITCH_HIDDEN have conflicts with these shortcuts: HIDE_MASK_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     520ms] [WARNING] The shortcut: del of AUDIO_DELETE_REGION have conflicts with these shortcuts: DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     521ms] [WARNING] The shortcut: shift+del of AUDIO_DELETE_REGION have conflicts with these shortcuts: DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     537ms] [WARNING] The shortcut: t l of SWITCH_ALL_LOCK have conflicts with these shortcuts: AUDIO_SWITCH_ALL_LOCK @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     537ms] [WARNING] The shortcut: t h of SWITCH_ALL_HIDDEN have conflicts with these shortcuts: AUDIO_SWITCH_ALL_HIDDEN @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     538ms] [WARNING] The shortcut: h of SWITCH_HIDDEN have conflicts with these shortcuts: AUDIO_SWITCH_HIDDEN, HIDE_MASK_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     538ms] [WARNING] The shortcut: h of SWITCH_HIDDEN have conflicts with these shortcuts: AUDIO_SWITCH_HIDDEN, HIDE_MASK_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     539ms] [WARNING] The shortcut: del of DELETE_OBJECT_STANDARD_WORKSPACE have conflicts with these shortcuts: AUDIO_DELETE_REGION, DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     539ms] [WARNING] The shortcut: del of DELETE_OBJECT_STANDARD_WORKSPACE have conflicts with these shortcuts: AUDIO_DELETE_REGION, DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     540ms] [WARNING] The shortcut: shift+del of DELETE_OBJECT_STANDARD_WORKSPACE have conflicts with these shortcuts: AUDIO_DELETE_REGION, DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     540ms] [WARNING] The shortcut: shift+del of DELETE_OBJECT_STANDARD_WORKSPACE have conflicts with these shortcuts: AUDIO_DELETE_REGION, DELETE_OBJECT_SINGLE_SHAPE @ http://localhost:8080/assets/cvat-ui.2456ea181bcc82cb43c0.min.js:1
+[     714ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/user-agreements?org=:0
+[    5049ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://localhost:8080/api/lambda/functions?org=:0

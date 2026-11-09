@@ -1,0 +1,155 @@
+- generic [ref=f2e10]:
+  - banner [ref=f2e11]:
+    - generic [ref=f2e12]:
+      - img "CVAT Logo" [ref=f2e14]
+      - link "Projects" [ref=f2e15] [cursor=pointer]:
+        - /url: /projects?page=1
+      - link "Tasks" [ref=f2e17] [cursor=pointer]:
+        - /url: /tasks?page=1
+      - link "Jobs" [ref=f2e19] [cursor=pointer]:
+        - /url: /jobs?page=1
+      - link "Cloud Storages" [ref=f2e21] [cursor=pointer]:
+        - /url: /cloudstorages?page=1
+      - link "Requests" [ref=f2e23] [cursor=pointer]:
+        - /url: /requests?page=1
+      - link "Models" [ref=f2e25] [cursor=pointer]:
+        - /url: /models
+      - link "Analytics" [ref=f2e27] [cursor=pointer]:
+        - /url: /analytics
+    - generic [ref=f2e29]:
+      - link [ref=f2e30] [cursor=pointer]:
+        - /url: https://github.com/cvat-ai/cvat
+        - img "github" [ref=f2e32]
+      - link [ref=f2e35] [cursor=pointer]:
+        - /url: https://docs.cvat.ai/docs
+        - img "question-circle" [ref=f2e37]
+      - generic [ref=f2e41] [cursor=pointer]:
+        - img "user" [ref=f2e42]
+        - strong [ref=f2e48]: Ngngothimi ...
+        - img "caret-down" [ref=f2e49]
+  - main [ref=f2e52]:
+    - generic [ref=f2e59]:
+      - generic [ref=f2e61]:
+        - generic [ref=f2e62]:
+          - button "Menu" [ref=f2e63] [cursor=pointer]
+          - button "Save" [ref=f2e68] [cursor=pointer]
+          - button "Undo"
+          - button "Redo"
+        - generic [ref=f2e74]:
+          - generic [ref=f2e75]:
+            - img [ref=f2e76] [cursor=pointer]
+            - img [ref=f2e79] [cursor=pointer]
+            - img [active] [ref=f2e82] [cursor=pointer]
+            - img [ref=f2e85] [cursor=pointer]
+            - img [ref=f2e88] [cursor=pointer]
+            - img [ref=f2e91] [cursor=pointer]
+            - img [ref=f2e94] [cursor=pointer]
+          - generic [ref=f2e97]:
+            - slider [ref=f2e102] [cursor=pointer]
+            - generic [ref=f2e103]:
+              - generic [ref=f2e104]: drive_003.jpg
+              - generic [ref=f2e106]:
+                - img "copy" [ref=f2e107] [cursor=pointer]
+                - img "link" [ref=f2e110] [cursor=pointer]
+                - img "delete" [ref=f2e113] [cursor=pointer]
+          - generic [ref=f2e117]:
+            - generic [ref=f2e118]:
+              - button "Increase Value" [ref=f2e119] [cursor=pointer]:
+                - img "up" [ref=f2e120]
+              - button "Decrease Value" [ref=f2e123] [cursor=pointer]:
+                - img "down" [ref=f2e124]
+            - spinbutton [ref=f2e128]: "2"
+          - img "search" [ref=f2e130] [cursor=pointer]
+        - generic [ref=f2e133]:
+          - button "Fullscreen" [ref=f2e134] [cursor=pointer]
+          - button "info-circle Info" [ref=f2e139] [cursor=pointer]:
+            - img "info-circle" [ref=f2e140]
+            - generic [ref=f2e144]: Info
+          - button "Filters" [ref=f2e145] [cursor=pointer]
+          - generic [ref=f2e153] [cursor=pointer]:
+            - combobox [ref=f2e155]
+            - generic "Standard" [ref=f2e156]
+      - main [ref=f2e157]:
+        - generic [ref=f2e158]:
+          - complementary [ref=f2e159]:
+            - generic [ref=f2e160]:
+              - img [ref=f2e162] [cursor=pointer]
+              - img [ref=f2e166] [cursor=pointer]
+              - img [ref=f2e170] [cursor=pointer]
+              - separator [ref=f2e173]
+              - img [ref=f2e175] [cursor=pointer]
+              - img [ref=f2e179] [cursor=pointer]
+              - separator [ref=f2e184]
+              - img [ref=f2e186] [cursor=pointer]
+              - img [ref=f2e190] [cursor=pointer]
+              - img [ref=f2e194] [cursor=pointer]
+              - img [ref=f2e198] [cursor=pointer]
+              - img [ref=f2e206] [cursor=pointer]
+              - img [ref=f2e212] [cursor=pointer]
+              - img [ref=f2e217] [cursor=pointer]
+              - img [ref=f2e221] [cursor=pointer]
+              - img [ref=f2e225] [cursor=pointer]
+              - img [ref=f2e229] [cursor=pointer]
+              - separator [ref=f2e235]
+              - img "small-dash" [ref=f2e236] [cursor=pointer]
+          - main [ref=f2e239]:
+            - generic [ref=f2e241]:
+              - img "up" [ref=f2e270] [cursor=pointer]
+              - button "Open layer stack. Current layer 0" [ref=f2e273] [cursor=pointer]:
+                - generic [ref=f2e279]: "0"
+          - complementary [ref=f2e280]:
+            - generic [ref=f2e281]:
+              - img "menu-unfold" [ref=f2e283]
+              - generic [ref=f2e286]:
+                - tablist [ref=f2e287]:
+                  - generic [ref=f2e289]:
+                    - tab "Objects" [selected] [ref=f2e291] [cursor=pointer]
+                    - tab "Labels" [ref=f2e293] [cursor=pointer]
+                    - tab "Issues" [ref=f2e295] [cursor=pointer]
+                - tabpanel "Objects" [ref=f2e298]:
+                  - generic [ref=f2e300]:
+                    - generic [ref=f2e301]:
+                      - generic [ref=f2e302]: "Items: 0"
+                      - generic [ref=f2e303]:
+                        - text: Sort by
+                        - generic [ref=f2e305] [cursor=pointer]:
+                          - combobox [ref=f2e307]
+                          - generic "ID - ascent" [ref=f2e308]
+                    - generic [ref=f2e310]:
+                      - img "lock" [ref=f2e1235] [cursor=pointer]
+                      - img "eye-invisible" [ref=f2e1238] [cursor=pointer]
+                      - img "caret-down" [ref=f2e320] [cursor=pointer]
+              - generic [ref=f2e1189]:
+                - button [expanded] [ref=f2e1190] [cursor=pointer]:
+                  - img "right" [ref=f2e1192]
+                  - strong [ref=f2e1197]: Appearance
+                - generic [ref=f2e1200]:
+                  - text: Color by
+                  - generic [ref=f2e1201]:
+                    - generic [ref=f2e1202] [cursor=pointer]:
+                      - generic [ref=f2e1203]:
+                        - radio "Label" [checked]
+                      - text: Label
+                    - generic [ref=f2e1204] [cursor=pointer]:
+                      - generic [ref=f2e1205]:
+                        - radio "Instance"
+                      - text: Instance
+                    - generic [ref=f2e1206] [cursor=pointer]:
+                      - generic [ref=f2e1207]:
+                        - radio "Group"
+                      - text: Group
+                  - text: Opacity
+                  - slider [ref=f2e1211] [cursor=pointer]
+                  - text: Selected opacity
+                  - slider [ref=f2e1215] [cursor=pointer]
+                  - generic [ref=f2e1216] [cursor=pointer]:
+                    - checkbox "Outlined borders" [ref=f2e1218]
+                    - generic [ref=f2e1220]:
+                      - text: Outlined borders
+                      - button [ref=f2e1221]
+                  - generic [ref=f2e1224] [cursor=pointer]:
+                    - checkbox "Show bitmap" [ref=f2e1226]
+                    - generic [ref=f2e1228]: Show bitmap
+                  - generic [ref=f2e1229] [cursor=pointer]:
+                    - checkbox "Show projections" [ref=f2e1231]
+                    - generic [ref=f2e1233]: Show projections
