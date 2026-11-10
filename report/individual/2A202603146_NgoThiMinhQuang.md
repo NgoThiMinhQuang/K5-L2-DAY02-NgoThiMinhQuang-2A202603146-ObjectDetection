@@ -49,8 +49,8 @@ Kết quả đánh giá annotation (cùng class, IoU≥0.50, one-to-one greedy t
 
 - Model: **YOLO26n** (`yolo26n.pt`), train trên **50 ảnh** `dataset/images/train` với nhãn đã QC; **không** đưa `eval` vào train.
 - Eval/validation: **10 ảnh** `dataset/images/eval` (`drive_051.jpg`–`drive_060.jpg`) — dùng làm `val` trong notebook/chọn `best.pt` (không phải test set độc lập).
-- Epochs: **50** | Train images: **50** | Eval images: **10** | Runtime: Google Colab, **GPU T4** (commit `f2af7e3`).
-- Kết quả đọc từ `assets/model_eval_metrics.json` (best checkpoint):
+- Epochs: **50** | Train images: **50** | Eval images: **10** | Runtime: Google Colab, **GPU Tesla T4** (commit `f2af7e3`).
+- Kết quả đọc từ `assets/model_eval_metrics.json` (best checkpoint, `eval_images=10`):
 
 | Chỉ số trên 10 ảnh eval | Giá trị |
 |---|---:|
@@ -61,24 +61,35 @@ Kết quả đánh giá annotation (cùng class, IoU≥0.50, one-to-one greedy t
 
 - Minh chứng (link tương đối):
   - 10 ảnh dự đoán: [assets/eval_predictions/visuals/drive_051.jpg](assets/eval_predictions/visuals/drive_051.jpg) … [assets/eval_predictions/visuals/drive_060.jpg](assets/eval_predictions/visuals/drive_060.jpg)
-  - Log/biểu đồ train: [assets/yolo26_runs/vehicle_annotation/results.csv](assets/yolo26_runs/vehicle_annotation/results.csv), [assets/yolo26_runs/vehicle_annotation/results.png](assets/yolo26_runs/vehicle_annotation/results.png), [assets/yolo26_runs/vehicle_annotation/confusion_matrix.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix.png)
-  - Chỉ số/đánh giá eval: [assets/yolo26_runs/vehicle_eval/](assets/yolo26_runs/vehicle_eval/) (confusion matrix, PR/F1/P/R curves, val batch labels/pred)
+  - Log/biểu đồ train: [assets/yolo26_runs/vehicle_annotation/results.csv](assets/yolo26_runs/vehicle_annotation/results.csv), [assets/yolo26_runs/vehicle_annotation/results.png](assets/yolo26_runs/vehicle_annotation/results.png), [assets/yolo26_runs/vehicle_annotation/BoxP_curve.png](assets/yolo26_runs/vehicle_annotation/BoxP_curve.png), [assets/yolo26_runs/vehicle_annotation/BoxR_curve.png](assets/yolo26_runs/vehicle_annotation/BoxR_curve.png), [assets/yolo26_runs/vehicle_annotation/BoxPR_curve.png](assets/yolo26_runs/vehicle_annotation/BoxPR_curve.png), [assets/yolo26_runs/vehicle_annotation/BoxF1_curve.png](assets/yolo26_runs/vehicle_annotation/BoxF1_curve.png), [assets/yolo26_runs/vehicle_annotation/confusion_matrix.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix.png), [assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png)
+  - Đánh giá eval: [assets/yolo26_runs/vehicle_eval/](assets/yolo26_runs/vehicle_eval/) (confusion matrix, PR/P/R/F1 curves, val batch labels/pred)
 
-**Nhận xét nhanh:** mAP/recall mô hình thấp trên tập eval nhỏ (10 ảnh) và train nhỏ (50 ảnh) với phân bố lớp lệch (`car` chiếm đa số, `truck/bus/van` ít), nên mô hình dễ thiên về `car` và bỏ sót/nhầm các lớp hiếm — phản ánh cả hạn chế dữ liệu và độ khó phân biệt `van/bus/truck`.
+### Phân tích ưu/nhược điểm theo từng lớp (car, truck, bus, van)
+
+*Phân tích định tính dựa trên kết quả thực tế (Precision 0.4105, Recall 0.2303, mAP50 0.2723, mAP50–95 0.2017), confusion matrix train/eval và ảnh dự đoán trên 10 ảnh eval; tập train 50 ảnh lệch phân bố lớp (`car` chiếm đa số, `truck/bus/van` ít).*
+
+| Lớp | Ưu điểm (quan sát) | Nhược điểm / lỗi thường gặp |
+|---|---|---|
+| **car (0)** | Lớp có nhiều mẫu nhất nên mô hình nhận diện tương đối tốt hơn các lớp còn lại; nhiều dự đoán đúng xuất hiện trên ảnh eval (xem visuals/confusion matrix). | Vẫn có FP/FN: nhầm với `van`/`truck` ở góc xa, xe nhỏ hoặc che khuất; box localization chưa chặt ở IoU cao. |
+| **truck (1)** | Khi đặc điểm rõ (thùng/kích thước lớn, gần camera) có thể phát hiện đúng trong một số trường hợp. | Recall thấp do ít mẫu train và dễ nhầm với `car` (pickup/xe lớn) hoặc `bus`; thường bị bỏ sót trong cảnh đông/xa. |
+| **bus (2)** | Xe buýt lớn, đặc trưng rõ ở một số ảnh giúp tách khỏi `car` khi đủ bối cảnh. | Recall thấp, mẫu hiếm và hay nhầm với `van`/minibus hoặc `truck`; nhạy với che khuất/biến dạng kích thước. |
+| **van (3)** | Một số trường hợp nhận dạng đúng khi hình dáng van rõ ràng. | Lớp khó/hiếm nhất: dễ nhầm với `car` (MPV/SUV) và `bus` (minibus), biên giới guideline mơ hồ; recall thấp và dễ bỏ sót. |
+
+**Nhận xét chung:** mAP/recall tổng thấp phản ánh dữ liệu train nhỏ và lệch lớp; mô hình thiên về `car`, còn `truck/bus/van` kém ổn định (bỏ sót/nhầm chéo). Khoảng cách mAP50 > mAP50–95 cho thấy localization ở ngưỡng IoU cao chưa tốt.
 
 ### Trả lời 4 câu hỏi phân tích
 
 1. **Lớp nào có recall thấp nhất? Chỉ ra một ảnh eval minh họa.**  
-   Dựa trên confusion matrix/eval ([assets/yolo26_runs/vehicle_annotation/confusion_matrix.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix.png), [assets/yolo26_runs/vehicle_eval/confusion_matrix.png](assets/yolo26_runs/vehicle_eval/confusion_matrix.png)), các lớp hiếm **`truck`, `bus`, `van`** có recall thấp hơn rõ rệt so với `car` (tập train lệch mạnh về `car`, số mẫu `truck/bus/van` ít). Ví dụ minh họa trên ảnh eval: [assets/eval_predictions/visuals/drive_054.jpg](assets/eval_predictions/visuals/drive_054.jpg) (cảnh nhiều xe/đa lớp, mô hình bỏ sót hoặc nhầm một số xe không phải `car`), đối chiếu thêm [assets/yolo26_runs/vehicle_eval/val_batch0_pred.jpg](assets/yolo26_runs/vehicle_eval/val_batch0_pred.jpg) vs [assets/yolo26_runs/vehicle_eval/val_batch0_labels.jpg](assets/yolo26_runs/vehicle_eval/val_batch0_labels.jpg).
+   Dựa trên confusion matrix ([assets/yolo26_runs/vehicle_annotation/confusion_matrix.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix.png), [assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png](assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png) và [assets/yolo26_runs/vehicle_eval/confusion_matrix.png](assets/yolo26_runs/vehicle_eval/confusion_matrix.png)), recall tổng thể thấp (0.2303) và các lớp hiếm **`truck`, `bus`, `van`** có recall thấp hơn rõ rệt so với **`car`** (tập train lệch mạnh về `car`, số mẫu `truck/bus/van` ít, dẫn đến bỏ sót/nhầm nhiều). Trong số này, các lớp hiếm (đặc biệt `van`/`bus` hoặc `truck` tùy ảnh) nằm trong nhóm recall thấp nhất. Ảnh minh họa: [assets/eval_predictions/visuals/drive_054.jpg](assets/eval_predictions/visuals/drive_054.jpg) (cảnh nhiều xe/đa lớp, thể hiện bỏ sót hoặc nhầm các xe không phải `car`), đối chiếu [assets/yolo26_runs/vehicle_eval/val_batch0_labels.jpg](assets/yolo26_runs/vehicle_eval/val_batch0_labels.jpg) vs [assets/yolo26_runs/vehicle_eval/val_batch0_pred.jpg](assets/yolo26_runs/vehicle_eval/val_batch0_pred.jpg).
 
 2. **Nếu mAP50 cao nhưng mAP50–95 thấp, box đang gặp vấn đề gì?**  
-   Ở đây mAP50 (0.2723) cao hơn mAP50–95 (0.2017), cho thấy mô hình phát hiện/tịnh tiến đúng vùng tương đối (đạt IoU ~0.5) nhưng **localization chưa chặt ở ngưỡng IoU cao**: box còn lệch biên, chưa ôm sát thân xe, hoặc kích thước chưa khớp tốt — nên khi yêu cầu IoU 0.75–0.95 thì điểm giảm rõ.
+   Kết quả thực tế cho thấy mAP50 (**0.2723**) cao hơn mAP50–95 (**0.2017**). Điều này nghĩa mô hình phát hiện đúng vùng tương đối ở IoU ~0.5 nhưng **localization chưa chặt ở ngưỡng IoU cao**: box lệch biên, chưa ôm sát thân xe hoặc kích thước/tỷ lệ chưa khớp tốt, nên khi đánh giá ở IoU 0.75–0.95 hiệu năng giảm rõ.
 
 3. **Có lỗi `truck`/`bus`/`van`/`car` nào liên quan tới guideline không?**  
-   Có. Nhầm giữa `van`↔`bus` (minibus/xe chở khách cỡ trung), `van`↔`car`/`truck` (SUV/pickup/xe van) và `truck`↔`bus` xuất hiện do ranh giới guideline khó trong ảnh xa/che khuất/ban đêm; việc gán/không gán xe rất nhỏ hoặc mơ hồ cũng ảnh hưởng. Điều này nhất quán với FP/FN annotation (nhầm class 4 lớp) và với confusion matrix model, cho thấy guideline + độ phủ mẫu hiếm cần được làm rõ/bổ sung.
+   Có. Theo guideline và quan sát thực nghiệm: nhầm **`van`↔`bus`** (minibus/xe chở khách cỡ trung), **`van`↔`car`/`truck`** (MPV/SUV/pickup), **`truck`↔`bus`** và **`car`↔`truck`** xuất hiện khi ranh giới hình thái không rõ (xa, che khuất, ban đêm). Việc chỉ gán khi nhận diện được lớp và box ôm phần nhìn thấy (theo guideline) cũng ảnh hưởng đến recall với xe nhỏ/mờ. Các lỗi này nhất quán với nhầm class trong annotation và confusion matrix của mô hình.
 
 4. **Vì sao không dùng 10 ảnh eval để train dù chúng có nhãn?**  
-   10 ảnh eval dùng để **đánh giá** (và trong notebook làm validation chọn `best.pt`) nhằm ước lượng khả năng tổng quát; nếu đưa vào train sẽ làm mô hình “nhớ” tập này → số liệu đánh giá bị lạc quan, không phản ánh đúng chất lượng. Vì vậy phải giữ nguyên split, **không** dùng eval để train.
+   10 ảnh eval dùng để **đánh giá** (và trong notebook làm validation để chọn `best.pt`) nhằm ước lượng khả năng tổng quát trên dữ liệu chưa thấy; nếu đưa vào train, mô hình sẽ “nhớ” tập này và các chỉ số (Precision/Recall/mAP) trở nên lạc quan, không phản ánh đúng chất lượng thực tế. Vì vậy phải giữ nguyên split **50 train / 10 eval**, **không** dùng eval để train.
 
 ## 6. Khó khăn và cách xử lý
 
