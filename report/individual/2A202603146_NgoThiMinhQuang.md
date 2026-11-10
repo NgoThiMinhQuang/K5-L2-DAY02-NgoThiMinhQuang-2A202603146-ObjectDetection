@@ -50,7 +50,7 @@ Chi tiết được ghi trong [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md).
 | `drive_003` | Nhiều phương tiện gần nhau tại giao lộ | Phân biệt từng phương tiện và tạo box riêng, không gộp nhiều xe |
 | `drive_004` | Ánh sáng yếu, phương tiện ở xa hoặc bị mờ | Kiểm tra khả năng nhận diện lớp trước khi gán nhãn, tránh suy đoán |
 
-Các trường hợp còn khó phân biệt gồm `van` với `bus` (đặc biệt minibus) và `car` với `truck` (đặc biệt xe bán tải).
+Các trường hợp còn khó phân biệt gồm `van` với `bus` (đặc biệt minibus) và ranh giới `car` với `truck`; theo `GUIDELINE_MINI.md`, xe bán tải thông thường thuộc `car` (không phải `truck`).
 
 ## 3. Quá trình annotation và self-QC
 
@@ -117,27 +117,19 @@ Một bounding box được tính là True Positive (TP) khi:
 
 Các chỉ số được sử dụng gồm Precision, Recall, F1-score và Mean IoU của các box ghép đúng.
 
-### 4.2. Kết quả đánh giá cuối cùng
+### 4.2. Kết quả đánh giá trước/sau rework
 
-Nguồn dữ liệu: `outputs/annotation_evaluation.json`.
+- **Commit khóa nhãn ban đầu (xác minh):** `9c06e50` (`feat: complete initial ADAS annotations`).
+- **Commit hoàn thiện sau rework/QC:** `f2af7e30ef063a4be3f68abd07b2a80131e5d58d` (nguồn: `outputs/annotation_evaluation.json`).
 
-| Chỉ số | Giá trị |
-|---|---:|
-| True Positive (TP) | 472 |
-| False Positive (FP) | 645 |
-| False Negative (FN) | 181 |
-| Precision | 0.4226 |
-| Recall | 0.7228 |
-| **F1-score** | **0.5333** |
-| **Mean IoU of matches** | **0.8446** |
-| `passed` theo evaluator gốc | `false` |
+| Mốc | Precision | Recall | F1-score | Mean IoU | `passed` (evaluator gốc) |
+|---|---:|---:|---:|---:|---|
+| Trước rework (`9c06e50`) | — | — | — | — | — |
+| Sau rework (`f2af7e3`) | 0.4226 | 0.7228 | 0.5333 | 0.8446 | `false` |
 
-Theo ngưỡng được cấu hình trong evaluator:
+**Lưu ý:** Không có file/log kết quả `annotation_evaluation` (hoặc số liệu Precision/Recall/F1/Mean IoU tương đương) trước rework được lưu/xác minh trong Git history (tại `9c06e50` không tồn tại `outputs/annotation_evaluation.json`; file này được thêm tại `f2af7e3`). Do đó, **không có dữ liệu số liệu trước rework được xác minh** để điền — không tự tạo số liệu.
 
-- F1-score yêu cầu ≥ 0.80.
-- Mean IoU yêu cầu ≥ 0.70.
-
-Kết quả Mean IoU đã vượt ngưỡng 0.70, trong khi F1-score chưa đạt ngưỡng 0.80.
+Kết quả sau rework (giữ nguyên, theo evaluator gốc): TP 472, FP 645, FN 181, Precision 0.4226, Recall 0.7228, F1-score 0.5333, Mean IoU 0.8446, `passed=false` (ngưỡng F1 ≥ 0.80, Mean IoU ≥ 0.70). Mean IoU vượt ngưỡng 0.70, F1 chưa đạt 0.80.
 
 **Theo thông báo của giảng viên được cung cấp trong quá trình thực hiện, học viên được phép tiếp tục bước huấn luyện với F1 trên 0.50.** Do đó, tôi giữ nguyên kết quả đánh giá thực tế và tiếp tục thực hiện notebook Colab mà không sửa giá trị `passed` do evaluator tạo ra.
 
@@ -298,7 +290,7 @@ Có. Một số nhóm phương tiện có hình dạng tương tự, dẫn đế
 
 - `van` với `bus` ở các phương tiện minibus.
 - `van` với `car` ở các xe MPV hoặc xe thân kín.
-- `car` với `truck` ở các phương tiện bán tải.
+- `car` với `truck` ở ranh giới xe chở hàng nhẹ; theo `GUIDELINE_MINI.md`, xe bán tải thông thường thuộc `car` (không phải `truck`).
 - `truck` với `bus` trong các cảnh có góc quan sát hoặc độ phân giải hạn chế.
 
 Theo guideline, cần quan sát cấu trúc thân xe và các đặc điểm có thể nhận diện trước khi quyết định class. Không tự suy đoán phương tiện quá mờ hoặc bị che khuất nghiêm trọng.

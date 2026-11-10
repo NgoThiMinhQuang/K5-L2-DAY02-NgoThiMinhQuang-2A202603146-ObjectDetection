@@ -1,9 +1,0 @@
-- generic [active] [ref=e1]:
-  - generic [ref=e2]: Connecting...
-  - generic [ref=e78]:
-    - alert [ref=e80]:
-      - img "close-circle" [ref=e81]
-      - paragraph [ref=e85]: Could not login on the server
-      - paragraph [ref=e87]: Unable to log in with provided credentials.
-    - generic "Close" [ref=e88] [cursor=pointer]:
-      - img "close" [ref=e89]
