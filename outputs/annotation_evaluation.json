@@ -1,0 +1,315 @@
+{
+  "iou_match_threshold": 0.5,
+  "precision": 0.4226,
+  "recall": 0.7228,
+  "f1": 0.5333,
+  "mean_iou_of_matches": 0.8446,
+  "true_positive": 472,
+  "false_positive": 645,
+  "false_negative": 181,
+  "passed": false,
+  "required_f1": 0.8,
+  "required_mean_iou": 0.7,
+  "per_image": [
+    {
+      "image": "drive_001",
+      "gold_boxes": 5,
+      "student_boxes": 18,
+      "matches": 5
+    },
+    {
+      "image": "drive_002",
+      "gold_boxes": 13,
+      "student_boxes": 46,
+      "matches": 11
+    },
+    {
+      "image": "drive_003",
+      "gold_boxes": 18,
+      "student_boxes": 46,
+      "matches": 17
+    },
+    {
+      "image": "drive_004",
+      "gold_boxes": 5,
+      "student_boxes": 10,
+      "matches": 3
+    },
+    {
+      "image": "drive_005",
+      "gold_boxes": 24,
+      "student_boxes": 28,
+      "matches": 16
+    },
+    {
+      "image": "drive_006",
+      "gold_boxes": 21,
+      "student_boxes": 38,
+      "matches": 19
+    },
+    {
+      "image": "drive_007",
+      "gold_boxes": 13,
+      "student_boxes": 27,
+      "matches": 12
+    },
+    {
+      "image": "drive_008",
+      "gold_boxes": 16,
+      "student_boxes": 26,
+      "matches": 8
+    },
+    {
+      "image": "drive_009",
+      "gold_boxes": 21,
+      "student_boxes": 32,
+      "matches": 8
+    },
+    {
+      "image": "drive_010",
+      "gold_boxes": 5,
+      "student_boxes": 9,
+      "matches": 5
+    },
+    {
+      "image": "drive_011",
+      "gold_boxes": 19,
+      "student_boxes": 36,
+      "matches": 17
+    },
+    {
+      "image": "drive_012",
+      "gold_boxes": 23,
+      "student_boxes": 44,
+      "matches": 18
+    },
+    {
+      "image": "drive_013",
+      "gold_boxes": 4,
+      "student_boxes": 5,
+      "matches": 4
+    },
+    {
+      "image": "drive_014",
+      "gold_boxes": 14,
+      "student_boxes": 26,
+      "matches": 10
+    },
+    {
+      "image": "drive_015",
+      "gold_boxes": 12,
+      "student_boxes": 11,
+      "matches": 7
+    },
+    {
+      "image": "drive_016",
+      "gold_boxes": 19,
+      "student_boxes": 22,
+      "matches": 16
+    },
+    {
+      "image": "drive_017",
+      "gold_boxes": 4,
+      "student_boxes": 10,
+      "matches": 3
+    },
+    {
+      "image": "drive_018",
+      "gold_boxes": 2,
+      "student_boxes": 11,
+      "matches": 1
+    },
+    {
+      "image": "drive_019",
+      "gold_boxes": 27,
+      "student_boxes": 31,
+      "matches": 22
+    },
+    {
+      "image": "drive_020",
+      "gold_boxes": 8,
+      "student_boxes": 11,
+      "matches": 6
+    },
+    {
+      "image": "drive_021",
+      "gold_boxes": 4,
+      "student_boxes": 12,
+      "matches": 2
+    },
+    {
+      "image": "drive_022",
+      "gold_boxes": 5,
+      "student_boxes": 6,
+      "matches": 2
+    },
+    {
+      "image": "drive_023",
+      "gold_boxes": 4,
+      "student_boxes": 4,
+      "matches": 3
+    },
+    {
+      "image": "drive_024",
+      "gold_boxes": 30,
+      "student_boxes": 37,
+      "matches": 18
+    },
+    {
+      "image": "drive_025",
+      "gold_boxes": 7,
+      "student_boxes": 8,
+      "matches": 6
+    },
+    {
+      "image": "drive_026",
+      "gold_boxes": 39,
+      "student_boxes": 41,
+      "matches": 29
+    },
+    {
+      "image": "drive_027",
+      "gold_boxes": 31,
+      "student_boxes": 38,
+      "matches": 19
+    },
+    {
+      "image": "drive_028",
+      "gold_boxes": 3,
+      "student_boxes": 18,
+      "matches": 3
+    },
+    {
+      "image": "drive_029",
+      "gold_boxes": 19,
+      "student_boxes": 28,
+      "matches": 11
+    },
+    {
+      "image": "drive_030",
+      "gold_boxes": 20,
+      "student_boxes": 43,
+      "matches": 14
+    },
+    {
+      "image": "drive_031",
+      "gold_boxes": 14,
+      "student_boxes": 38,
+      "matches": 13
+    },
+    {
+      "image": "drive_032",
+      "gold_boxes": 5,
+      "student_boxes": 6,
+      "matches": 5
+    },
+    {
+      "image": "drive_033",
+      "gold_boxes": 12,
+      "student_boxes": 21,
+      "matches": 9
+    },
+    {
+      "image": "drive_034",
+      "gold_boxes": 10,
+      "student_boxes": 15,
+      "matches": 9
+    },
+    {
+      "image": "drive_035",
+      "gold_boxes": 6,
+      "student_boxes": 12,
+      "matches": 5
+    },
+    {
+      "image": "drive_036",
+      "gold_boxes": 6,
+      "student_boxes": 15,
+      "matches": 4
+    },
+    {
+      "image": "drive_037",
+      "gold_boxes": 7,
+      "student_boxes": 10,
+      "matches": 6
+    },
+    {
+      "image": "drive_038",
+      "gold_boxes": 17,
+      "student_boxes": 30,
+      "matches": 14
+    },
+    {
+      "image": "drive_039",
+      "gold_boxes": 11,
+      "student_boxes": 20,
+      "matches": 7
+    },
+    {
+      "image": "drive_040",
+      "gold_boxes": 19,
+      "student_boxes": 27,
+      "matches": 12
+    },
+    {
+      "image": "drive_041",
+      "gold_boxes": 24,
+      "student_boxes": 21,
+      "matches": 9
+    },
+    {
+      "image": "drive_042",
+      "gold_boxes": 4,
+      "student_boxes": 11,
+      "matches": 1
+    },
+    {
+      "image": "drive_043",
+      "gold_boxes": 13,
+      "student_boxes": 24,
+      "matches": 10
+    },
+    {
+      "image": "drive_044",
+      "gold_boxes": 8,
+      "student_boxes": 24,
+      "matches": 6
+    },
+    {
+      "image": "drive_045",
+      "gold_boxes": 15,
+      "student_boxes": 29,
+      "matches": 12
+    },
+    {
+      "image": "drive_046",
+      "gold_boxes": 3,
+      "student_boxes": 7,
+      "matches": 2
+    },
+    {
+      "image": "drive_047",
+      "gold_boxes": 4,
+      "student_boxes": 4,
+      "matches": 2
+    },
+    {
+      "image": "drive_048",
+      "gold_boxes": 16,
+      "student_boxes": 22,
+      "matches": 9
+    },
+    {
+      "image": "drive_049",
+      "gold_boxes": 6,
+      "student_boxes": 21,
+      "matches": 6
+    },
+    {
+      "image": "drive_050",
+      "gold_boxes": 18,
+      "student_boxes": 38,
+      "matches": 16
+    }
+  ]
+}
