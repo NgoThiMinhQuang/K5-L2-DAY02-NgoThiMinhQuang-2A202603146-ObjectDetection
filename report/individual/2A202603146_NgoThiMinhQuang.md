@@ -249,8 +249,8 @@ Tôi sử dụng Google Colab để huấn luyện mô hình YOLO26n trên bộ 
 | Số class | 4 |
 | Batch size | Tự động theo cấu hình notebook (`batch=-1`) |
 | Seed | 20260909 |
-| Phiên bản Ultralytics | Chưa ghi nhận phiên bản chính xác trong báo cáo; kiểm tra từ phiên Colab |
-| Phiên bản PyTorch | Chưa ghi nhận phiên bản chính xác trong báo cáo; kiểm tra từ phiên Colab |
+| Phiên bản Ultralytics | 8.4.208 *(phiên bản kiểm tra trong runtime Colab sau huấn luyện; chưa xác minh là phiên bản tại thời điểm train)* |
+| Phiên bản PyTorch | 2.14.1+cu130 *(phiên bản kiểm tra trong runtime Colab sau huấn luyện; chưa xác minh là phiên bản tại thời điểm train)* |
 
 Tôi sử dụng cấu hình huấn luyện trong notebook của bài, không đưa ảnh eval vào tập train.
 
