@@ -2,154 +2,241 @@
 
 ## 1. Thông tin học viên
 
-| Thông tin | Nội dung |
-|---|---|
-| Họ và tên | Ngô Thị Minh Quang |
-| Mã số sinh viên | 2A202603146 |
-| Lớp | L2A |
-| Email | minhquang17012005@gmail.com |
-| Repository | [GitHub — Day 2 Object Detection](https://github.com/NgoThiMinhQuang/K5-L2-DAY02-NgoThiMinhQuang-2A202603146-ObjectDetection) |
-| Google Colab | [Notebook huấn luyện YOLO26n](https://colab.research.google.com/drive/1gQec4pAkOKcSup2J4eYudVt2ceeXLETG?usp=sharing) |
+- **Họ và tên:** Ngô Thị Minh Quang
+- **MSSV:** 2A202603146
+- **Email:** minhquang17012005@gmail.com
+- **Lớp:** L2A
+- **Link repository:** [K5-L2-DAY02-NgoThiMinhQuang-2A202603146-ObjectDetection](https://github.com/NgoThiMinhQuang/K5-L2-DAY02-NgoThiMinhQuang-2A202603146-ObjectDetection)
+- **Link Google Colab đã chạy:** [Notebook huấn luyện YOLO26n](https://colab.research.google.com/drive/1gQec4pAkOKcSup2J4eYudVt2ceeXLETG?usp=sharing)
 
-## 2. Schema và quy tắc gán nhãn
+## 2. Schema và mini guideline
 
-### 2.1. Bộ nhãn sử dụng
+### 2.1. Schema sử dụng
 
-Bài thực hành yêu cầu gán nhãn các phương tiện giao thông theo định dạng YOLO Detection, gồm bốn lớp đối tượng:
+Trong bài thực hành, tôi thực hiện gán nhãn phương tiện giao thông theo định dạng YOLO Detection, gồm bốn lớp đối tượng với ID cố định:
 
-| Class ID | Tên lớp | Mô tả |
+| Class ID | Tên lớp | Định nghĩa |
 |---|---|---|
-| 0 | `car` | Xe ô tô con |
-| 1 | `truck` | Xe tải và các phương tiện chở hàng thuộc nhóm truck |
-| 2 | `bus` | Xe buýt, xe khách thuộc nhóm bus |
-| 3 | `van` | Xe van, minivan theo quy định gán nhãn |
+| 0 | `car` | Ô tô con, sedan, SUV, taxi và xe bán tải thông thường |
+| 1 | `truck` | Xe tải, xe đầu kéo và các loại xe được thiết kế chuyên chở hàng hóa |
+| 2 | `bus` | Xe buýt, xe khách và minibus được thiết kế chở hành khách |
+| 3 | `van` | Xe van, minivan phục vụ vận chuyển hàng hóa hoặc hành khách |
 
-Mỗi bounding box được lưu theo cấu trúc:
+Mỗi đối tượng được biểu diễn bằng một dòng nhãn YOLO:
 
 `class_id x_center y_center width height`
 
-Các tọa độ được chuẩn hóa trong khoảng `[0, 1]`.
+Các tọa độ được chuẩn hóa trong khoảng từ 0 đến 1.
 
 ### 2.2. Nguyên tắc gán nhãn
 
-Trong quá trình thực hiện, tôi áp dụng các nguyên tắc:
+Tôi thực hiện gán nhãn dựa trên các nguyên tắc:
 
-- Mỗi phương tiện được gán một bounding box riêng biệt.
-- Bounding box cần ôm sát phần phương tiện có thể quan sát được.
-- Với phương tiện bị che khuất hoặc cắt bởi rìa ảnh, chỉ gán khi có đủ đặc điểm nhận diện lớp.
-- Không gán xe máy, xe đạp, người đi bộ, biển báo, đèn giao thông hoặc các đối tượng ngoài bốn lớp yêu cầu.
-- Không tự suy đoán loại phương tiện khi hình ảnh không cung cấp đủ thông tin.
+- Mỗi phương tiện hợp lệ được gán một bounding box riêng.
+- Bounding box cần ôm sát phần phương tiện có thể quan sát trong ảnh.
+- Với phương tiện bị che khuất, chỉ gán nhãn khi phần nhìn thấy vẫn đủ để nhận diện loại xe.
+- Với phương tiện bị cắt ở rìa ảnh, bounding box được giới hạn trong phạm vi ảnh.
+- Không gộp nhiều phương tiện thành một bounding box.
+- Không gán các đối tượng ngoài phạm vi yêu cầu như xe máy, xe đạp, người đi bộ, biển báo và đèn giao thông.
+- Không tự suy đoán class đối với phương tiện quá nhỏ hoặc mờ, không đủ đặc điểm nhận diện.
 
-Chi tiết được ghi trong [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md).
+Chi tiết được trình bày trong [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md).
 
-### 2.3. Ba trường hợp khó
+### 2.3. Ba trường hợp mơ hồ đã xử lý
 
-| Ảnh | Vấn đề | Hướng xử lý |
-|---|---|---|
-| `drive_002` | Một số phương tiện bị che khuất | Chỉ gán khi phần nhìn thấy đủ để xác định loại xe; box ôm phần nhìn thấy |
-| `drive_003` | Nhiều phương tiện gần nhau tại giao lộ | Phân biệt từng phương tiện và tạo box riêng, không gộp nhiều xe |
-| `drive_004` | Ánh sáng yếu, phương tiện ở xa hoặc bị mờ | Kiểm tra khả năng nhận diện lớp trước khi gán nhãn, tránh suy đoán |
+| Ảnh | Tình huống | Quyết định | Lý do |
+|---|---|---|---|
+| `drive_002` | Một số phương tiện bị che khuất hoặc di chuyển gần nhau | Gán nhãn riêng cho phương tiện nếu phần nhìn thấy đủ để nhận diện | Xe bị che khuất vẫn cần được gán nhãn khi xác định được class |
+| `drive_003` | Nhiều phương tiện xuất hiện tại giao lộ, dễ bị gộp box | Mỗi xe được vẽ một bounding box riêng | Mỗi đối tượng phải được nhận diện và phân loại độc lập |
+| `drive_004` | Cảnh ban đêm, ánh sáng yếu, phương tiện nhỏ hoặc ở xa | Chỉ gán nhãn khi xác định được loại phương tiện | Tránh tạo nhãn thiếu căn cứ do hình ảnh mờ hoặc không đủ đặc điểm |
 
-Các trường hợp còn khó phân biệt gồm `van` với `bus` (đặc biệt minibus) và ranh giới `car` với `truck`; theo `GUIDELINE_MINI.md`, xe bán tải thông thường thuộc `car` (không phải `truck`).
+### 2.4. Các trường hợp cần làm rõ thêm
 
-## 3. Quá trình annotation và self-QC
+Trong quá trình thực hiện, tôi gặp khó khăn khi phân biệt một số nhóm phương tiện có hình dạng tương tự:
 
-### 3.1. Chuẩn bị dữ liệu
+- `van` và `bus`, đặc biệt là minibus.
+- `car` và `van`, đặc biệt đối với các dòng MPV.
+- `car` và `truck` trong các trường hợp xe chở hàng nhẹ.
 
-Bộ dữ liệu sử dụng trong bài gồm:
+Theo mini guideline của bài, **xe bán tải thông thường được xếp vào lớp `car`**, không tự chuyển sang `truck`.
 
-| Tập dữ liệu | Số lượng ảnh | Mục đích |
+Đối với những phương tiện quá xa hoặc bị che khuất khiến việc phân loại không rõ ràng, tôi ưu tiên tuân thủ guideline và ghi nhận trường hợp khó thay vì tự thay đổi schema.
+
+## 3. Annotation và self-QC
+
+### 3.1. Số lượng dữ liệu
+
+Bộ dữ liệu thực hành gồm 60 ảnh giao thông, được chia thành:
+
+| Tập dữ liệu | Số lượng | Mục đích |
 |---|---:|---|
-| Train | 50 | Gán nhãn và huấn luyện YOLO26n |
-| Eval | 10 | Validation và đánh giá mô hình |
-| Tổng cộng | 60 | Toàn bộ dữ liệu của bài thực hành |
+| Train | 50 ảnh | Gán nhãn và huấn luyện mô hình |
+| Eval | 10 ảnh | Validation và đánh giá mô hình |
+| Tổng | 60 ảnh | Dữ liệu của bài thực hành |
 
-Bộ nhãn chính thức được lưu tại:
+Tôi hoàn thành **50/50 file nhãn train**, từ `drive_001.txt` đến `drive_050.txt`, được lưu tại:
 
 `dataset/labels/train/`
 
-Gồm 50 file từ `drive_001.txt` đến `drive_050.txt`, tương ứng với 50 ảnh train.
+Tên các file nhãn tương ứng với tên ảnh trong `dataset/images/train/`.
 
-### 3.2. Thực hiện gán nhãn
+### 3.2. Quá trình thực hiện annotation
 
-Tôi sử dụng CVAT để quan sát ảnh giao thông, kiểm tra bounding box và chỉnh sửa nhãn theo schema bốn lớp.
+Tôi sử dụng CVAT để quan sát ảnh, gán nhãn và rà soát bounding box.
 
-Trong quá trình rà soát, các vấn đề được chú ý gồm:
+Trong quá trình thực hiện, tôi tập trung kiểm tra các vấn đề:
 
-- Bounding box thừa hoặc trùng trên cùng phương tiện.
-- Nhận diện nhầm giữa `car`, `truck`, `bus` và `van`.
-- Bounding box lệch, quá rộng hoặc chưa ôm sát xe.
-- Một số phương tiện nhỏ, xa hoặc bị che khuất chưa được nhận diện chính xác.
-- Các đối tượng không thuộc phạm vi yêu cầu.
+- Phương tiện chưa được gán nhãn.
+- Bounding box quá rộng, lệch hoặc chưa ôm sát thân xe.
+- Nhiều bounding box bị trùng trên cùng một phương tiện.
+- Gán nhầm giữa các lớp `car`, `truck`, `bus` và `van`.
+- Gán nhãn cho những đối tượng không thuộc bốn lớp yêu cầu.
 
-Tôi đã xem lại các ảnh từ `drive_001` đến `drive_010`, đồng thời tập trung rà soát thêm những ảnh có nhiều sai lệch như `drive_012`, `drive_024`, `drive_027`, `drive_030` và `drive_041`.
+Tôi thực hiện nhiều vòng kiểm tra và chỉnh sửa nhãn, đặc biệt đối với các ảnh có mật độ phương tiện cao, ảnh ban đêm và ảnh có nhiều phương tiện bị che khuất.
 
-### 3.3. Kiểm tra cấu trúc nhãn
+### 3.3. Kết quả kiểm tra cấu trúc
 
-Sau khi hoàn thành gán nhãn, tôi sử dụng công cụ kiểm tra có sẵn trong repository:
+Tôi sử dụng script kiểm tra nhãn có sẵn trong repository:
 
 ```bash
 python tools/check_yolo_labels.py --labels dataset/labels/train
 ```
 
-**Kết quả: ĐẠT cấu trúc 50/50 file nhãn.**
+Kết quả kiểm tra:
 
-Các file đáp ứng các yêu cầu kỹ thuật: đúng định dạng YOLO Detection, mỗi dòng có năm giá trị, class ID thuộc khoảng 0–3 và tọa độ chuẩn hóa hợp lệ.
+- Đầy đủ 50/50 file nhãn.
+- Mỗi dòng nhãn có đúng năm trường thông tin.
+- Class ID nằm trong phạm vi 0–3.
+- Tọa độ bounding box được chuẩn hóa.
+- Bounding box có kích thước hợp lệ.
 
-### 3.4. Commit khóa nhãn
+**Kết luận:** Bộ nhãn đạt yêu cầu về cấu trúc YOLO Detection.
 
-- Commit khóa nhãn ban đầu (hoàn thành 50 nhãn train, trước commit finalize/eval với Gold QC): **`9c06e50`** (`feat: complete initial ADAS annotations`, thêm đầy đủ 50 file `dataset/labels/train/drive_001.txt`–`drive_050.txt`).
-- Commit hoàn thiện bộ nhãn được sử dụng để train: **`f2af7e30ef063a4be3f68abd07b2a80131e5d58d`** (`feat: finalize ADAS annotations and evaluation`).
+Tuy nhiên, kết quả này chỉ xác nhận tính hợp lệ về định dạng, không chứng minh tất cả bounding box và class đều chính xác.
 
-Hai mốc commit được phân biệt để thể hiện lịch sử gán nhãn ban đầu và bản hoàn thiện sau rà soát/đánh giá.
+### 3.4. Danh sách ảnh đã rà bằng mắt
 
-## 4. Gold-set QC và chỉnh sửa annotation
+Tôi đã rà soát ít nhất 10 ảnh:
+
+`drive_001`, `drive_002`, `drive_003`, `drive_004`, `drive_005`, `drive_006`, `drive_007`, `drive_008`, `drive_009`, `drive_010`.
+
+Ngoài ra, tôi tiếp tục kiểm tra các ảnh có nhiều sai lệch trong quá trình đánh giá như:
+
+`drive_012`, `drive_024`, `drive_027`, `drive_030`, `drive_041`.
+
+### 3.5. Các lỗi phát hiện và cách xử lý
+
+| Lỗi phát hiện | Cách xử lý |
+|---|---|
+| Bounding box trùng | Xóa box bị trùng trên cùng phương tiện |
+| Bounding box chưa sát | Chỉnh tọa độ để box ôm sát phần nhìn thấy |
+| Gán nhầm class | Quan sát lại đặc điểm phương tiện và đối chiếu guideline |
+| Bỏ sót phương tiện | Bổ sung nhãn nếu có đủ căn cứ nhận diện |
+| Box hoặc class không thuộc phạm vi | Loại bỏ nhãn không hợp lệ |
+| Phương tiện nhỏ hoặc mờ | Kiểm tra kỹ trước khi quyết định gán nhãn |
+
+### 3.6. Commit khóa nhãn ban đầu
+
+Sau khi hoàn thành bộ nhãn ban đầu, tôi lưu lại phiên bản dữ liệu trên GitHub để có thể đối chiếu với các chỉnh sửa sau này.
+
+- **Commit khóa nhãn ban đầu:** `9c06e50482279ec5b02368dbed98e1e7e6db131d`
+- **Commit hoàn thiện sau rework:** `f2af7e30ef063a4be3f68abd07b2a80131e5d58d`
+
+Việc giữ hai mốc commit giúp phân biệt bộ nhãn ban đầu với phiên bản đã được rà soát và đánh giá.
+
+## 4. Gold QC và rework
 
 ### 4.1. Phương pháp đánh giá
 
-Tôi sử dụng công cụ `tools/evaluate_annotations.py` để đánh giá chất lượng nhãn so với Gold Set.
+Sau khi hoàn thành annotation và lưu commit ban đầu, tôi sử dụng công cụ `tools/evaluate_annotations.py` để đánh giá chất lượng nhãn dựa trên Gold Set được cung cấp cho bước QC.
 
-Một bounding box được tính là True Positive (TP) khi:
+Điều kiện matching:
 
-- Class dự đoán trùng với class của Gold Set.
-- IoU giữa hai bounding box đạt ít nhất 0.50.
-- Mỗi box chỉ được ghép với tối đa một box tương ứng theo quy tắc matching của evaluator.
+- Hai bounding box phải thuộc cùng một class.
+- IoU đạt ít nhất 0.50.
+- Mỗi bounding box được ghép tối đa một lần theo quy tắc của evaluator.
 
-Các chỉ số được sử dụng gồm Precision, Recall, F1-score và Mean IoU của các box ghép đúng.
+Các chỉ số được sử dụng gồm:
 
-### 4.2. Kết quả đánh giá trước/sau rework
+- True Positive (TP).
+- False Positive (FP).
+- False Negative (FN).
+- Precision.
+- Recall.
+- F1-score.
+- Mean IoU of matches.
 
-- **Commit khóa nhãn ban đầu (xác minh):** `9c06e50` (`feat: complete initial ADAS annotations`).
-- **Commit hoàn thiện sau rework/QC:** `f2af7e30ef063a4be3f68abd07b2a80131e5d58d` (nguồn: `outputs/annotation_evaluation.json`).
+### 4.2. Kết quả đánh giá trước và sau rework
 
-| Mốc | Precision | Recall | F1-score | Mean IoU | `passed` (evaluator gốc) |
-|---|---:|---:|---:|---:|---|
-| Trước rework (`9c06e50`) | — | — | — | — | — |
-| Sau rework (`f2af7e3`) | 0.4226 | 0.7228 | 0.5333 | 0.8446 | `false` |
+| Chỉ số | Trước sửa | Sau sửa |
+|---|---:|---:|
+| TP | — | 472 |
+| FP | — | 645 |
+| FN | — | 181 |
+| Precision | — | 0.4226 |
+| Recall | — | 0.7228 |
+| **F1-score** | — | **0.5333** |
+| **mean_iou_of_matches** | — | **0.8446** |
+| `passed` | — | `false` |
 
-**Lưu ý:** Không có file/log kết quả `annotation_evaluation` (hoặc số liệu Precision/Recall/F1/Mean IoU tương đương) trước rework được lưu/xác minh trong Git history (tại `9c06e50` không tồn tại `outputs/annotation_evaluation.json`; file này được thêm tại `f2af7e3`). Do đó, **không có dữ liệu số liệu trước rework được xác minh** để điền — không tự tạo số liệu.
+**Giải thích dữ liệu trước rework:**
 
-Kết quả sau rework (giữ nguyên, theo evaluator gốc): TP 472, FP 645, FN 181, Precision 0.4226, Recall 0.7228, F1-score 0.5333, Mean IoU 0.8446, `passed=false` (ngưỡng F1 ≥ 0.80, Mean IoU ≥ 0.70). Mean IoU vượt ngưỡng 0.70, F1 chưa đạt 0.80.
+Commit khóa nhãn ban đầu là `9c06e50`. Tuy nhiên, không có file hoặc log đánh giá trước rework được xác minh trong lịch sử Git hiện có. Vì vậy, tôi để trống các chỉ số trước sửa thay vì tự điền số liệu không có căn cứ.
 
-**Theo thông báo của giảng viên được cung cấp trong quá trình thực hiện, học viên được phép tiếp tục bước huấn luyện với F1 trên 0.50.** Do đó, tôi giữ nguyên kết quả đánh giá thực tế và tiếp tục thực hiện notebook Colab mà không sửa giá trị `passed` do evaluator tạo ra.
+Kết quả sau sửa được lưu trong:
+
+[outputs/annotation_evaluation.json](../../outputs/annotation_evaluation.json)
 
 ### 4.3. Phân tích kết quả
 
-Mean IoU đạt 0.8446 cho thấy các bounding box được ghép đúng thường có độ trùng khớp hình học tương đối tốt.
+Theo evaluator gốc, yêu cầu chất lượng annotation là:
 
-Tuy nhiên, Precision chỉ đạt 0.4226, phản ánh số lượng box không ghép được với Gold Set còn lớn. Bên cạnh đó, Recall đạt 0.7228, cho thấy vẫn tồn tại các đối tượng chưa được ghép đúng.
+- F1-score ≥ 0.80.
+- Mean IoU ≥ 0.70.
 
-Các nguyên nhân có khả năng ảnh hưởng đến kết quả gồm nhầm loại phương tiện, box thừa hoặc trùng, đối tượng quá nhỏ, xe bị che khuất và sự khác biệt trong cách áp dụng guideline đối với các trường hợp mơ hồ.
+Kết quả của tôi:
 
-Tôi thực hiện rà soát và chỉnh sửa dựa trên ảnh gốc cùng quy tắc gán nhãn. Gold Set chỉ được sử dụng phục vụ kiểm tra và phân tích kết quả, không sao chép thành dữ liệu nhãn nộp bài.
+- F1-score = 0.5333, chưa đạt ngưỡng 0.80.
+- Mean IoU = 0.8446, vượt ngưỡng 0.70.
 
-## 5. Huấn luyện và đánh giá YOLO26n trên Google Colab
+Mean IoU tương đối cao cho thấy các bounding box được ghép đúng thường có mức độ trùng khớp hình học tốt.
 
-### 5.1. Cấu hình thực nghiệm
+Tuy nhiên, số lượng False Positive còn lớn (645), khiến Precision và F1-score thấp.
 
-Sau khi hoàn thiện bước annotation, tôi tiến hành huấn luyện mô hình YOLO26n thông qua notebook `notebooks/day2_annotation_to_yolo.ipynb`.
+Từ việc kiểm tra ảnh, tôi nhận thấy các trường hợp có khả năng ảnh hưởng đến kết quả gồm phương tiện nhỏ, đối tượng bị che khuất, bounding box thừa và sự nhầm lẫn giữa những lớp phương tiện có hình dạng tương tự.
 
-| Thành phần | Cấu hình |
+Không thể kết luận chính xác nguyên nhân chỉ dựa trên các giá trị TP, FP và FN. Vì vậy, tôi kết hợp việc xem ảnh gốc và kiểm tra nhãn để phân tích sai lệch.
+
+### 4.4. Quá trình rework
+
+Tôi thực hiện rà soát và chỉnh sửa annotation qua nhiều vòng, tập trung vào các trường hợp:
+
+- Box bị trùng hoặc quá rộng.
+- Nhãn phương tiện chưa nhất quán.
+- Xe nhỏ hoặc bị che khuất.
+- Các ảnh có mật độ phương tiện cao.
+
+Các ảnh được ưu tiên rà soát thêm gồm `drive_012`, `drive_024`, `drive_027`, `drive_030` và `drive_041`.
+
+Tùy từng trường hợp, tôi quyết định:
+
+- Giữ nguyên nhãn khi class và bounding box có đủ căn cứ.
+- Điều chỉnh bounding box khi tọa độ chưa phù hợp.
+- Thay đổi class khi đặc điểm xe cho thấy nhãn cũ không đúng guideline.
+- Xóa box bị trùng hoặc không thuộc phạm vi bài toán.
+- Bổ sung box nếu phát hiện phương tiện hợp lệ bị bỏ sót.
+
+Việc chỉnh sửa được thực hiện dựa trên ảnh gốc và guideline. Gold Set chỉ phục vụ đánh giá, không được sao chép để thay thế bộ nhãn của tôi.
+
+Theo thông báo của giảng viên trong quá trình thực hành, học viên được phép tiếp tục bước huấn luyện khi F1 trên 0.50. Tôi giữ nguyên kết quả evaluator là `passed=false`, không chỉnh sửa ngưỡng hoặc số liệu để tạo kết quả đạt giả.
+
+## 5. Kết quả YOLO
+
+### 5.1. Môi trường huấn luyện
+
+Tôi sử dụng Google Colab để huấn luyện mô hình YOLO26n trên bộ nhãn đã hoàn thành.
+
+| Thành phần | Thông tin |
 |---|---|
 | Mô hình | YOLO26n |
 | Checkpoint khởi tạo | `yolo26n.pt` |
@@ -157,62 +244,76 @@ Sau khi hoàn thiện bước annotation, tôi tiến hành huấn luyện mô h
 | GPU | NVIDIA Tesla T4 |
 | Số epochs | 50 |
 | Kích thước ảnh | 640 × 640 |
-| Batch size | Tự động (`batch=-1`) |
-| Seed | 20260909 |
 | Số ảnh train | 50 |
-| Số ảnh validation/eval | 10 |
-| Class | car, truck, bus, van |
-| Commit dữ liệu | `f2af7e3` |
+| Số ảnh eval | 10 |
+| Số class | 4 |
+| Batch size | Tự động theo cấu hình notebook (`batch=-1`) |
+| Seed | 20260909 |
+| Phiên bản Ultralytics | Chưa ghi nhận phiên bản chính xác trong báo cáo; kiểm tra từ phiên Colab |
+| Phiên bản PyTorch | Chưa ghi nhận phiên bản chính xác trong báo cáo; kiểm tra từ phiên Colab |
 
-Mô hình được huấn luyện trên 50 ảnh trong `dataset/images/train` và các nhãn tương ứng.
+Tôi sử dụng cấu hình huấn luyện trong notebook của bài, không đưa ảnh eval vào tập train.
 
-Mười ảnh `drive_051.jpg` đến `drive_060.jpg` được sử dụng làm validation theo cấu hình notebook, đồng thời để đánh giá kết quả cuối trên checkpoint tốt nhất.
+Các tham số chính được thiết lập theo quá trình chạy thực nghiệm gồm 50 epochs và kích thước ảnh 640 × 640. Tôi không thực hiện thêm một thí nghiệm điều chỉnh siêu tham số độc lập để so sánh.
 
-**Lưu ý:** Vì tập eval cũng được sử dụng trong quá trình validation và lựa chọn `best.pt`, kết quả trên 10 ảnh này không được xem là đánh giá trên một tập test độc lập hoàn toàn.
+### 5.2. Đường dẫn best checkpoint
 
-### 5.2. Kết quả huấn luyện
+Quá trình huấn luyện hoàn thành 50/50 epochs.
 
-Quá trình huấn luyện hoàn thành 50/50 epochs và tạo checkpoint `best.pt`.
+Checkpoint tốt nhất được lưu trong phiên Colab tại:
 
-Kết quả đánh giá mô hình trên 10 ảnh eval:
+```text
+/content/Day2-Lab/outputs/yolo26_runs/vehicle_annotation/weights/best.pt
+```
 
-| Chỉ số | Giá trị |
+Checkpoint này được dùng để đánh giá và dự đoán trên tập eval.
+
+Tôi không đưa checkpoint `.pt` lên GitHub vì quy định bài nộp không cho phép commit model weights.
+
+### 5.3. Kết quả đánh giá trên 10 ảnh eval
+
+Tôi sử dụng 10 ảnh `drive_051.jpg` đến `drive_060.jpg` để validation và đánh giá kết quả mô hình.
+
+Kết quả đọc từ `model_eval_metrics.json`:
+
+| Chỉ số trên 10 ảnh eval | Giá trị |
 |---|---:|
 | **Precision** | **0.4105** |
 | **Recall** | **0.2303** |
-| **mAP@50** | **0.2723** |
-| **mAP@50:95** | **0.2017** |
-| Số ảnh eval | 10 |
+| **mAP50** | **0.2723** |
+| **mAP50–95** | **0.2017** |
 
-Đây là các chỉ số đánh giá **mô hình Object Detection sau huấn luyện**, khác với F1-score và Mean IoU được sử dụng để đánh giá chất lượng nhãn annotation ở Mục 4.
+File kết quả:
 
-### 5.3. Kết quả theo từng lớp
+[model_eval_metrics.json](assets/model_eval_metrics.json)
 
-Theo log validation của checkpoint tốt nhất:
+Các chỉ số trên là kết quả đánh giá mô hình YOLO26n sau huấn luyện, không phải các chỉ số F1 và Mean IoU của bước Gold QC.
 
-| Lớp | Số đối tượng trong eval | Precision | Recall | mAP50 |
+### 5.4. Kết quả theo từng lớp
+
+Theo log validation của mô hình:
+
+| Class | Số đối tượng eval | Precision | Recall | mAP50 |
 |---|---:|---:|---:|---:|
 | car | 94 | 0.833 | 0.637 | 0.740 |
 | truck | 5 | 0.677 | 0.200 | 0.239 |
 | bus | 2 | 0.000 | 0.000 | 0.0079 |
 | van | 12 | 0.135 | 0.083 | 0.103 |
 
-*Các giá trị được làm tròn từ log validation khi hoàn tất 50 epochs.*
+Tôi nhận thấy:
 
-**Nhận xét theo lớp:**
+- Lớp `car` có kết quả tốt nhất, với mAP50 khoảng 0.740.
+- Lớp `truck` có Recall thấp, cho thấy mô hình vẫn bỏ sót nhiều trường hợp.
+- Lớp `bus` có Recall bằng 0.000 trong log validation, thấp nhất trong bốn lớp.
+- Lớp `van` có Recall khoảng 0.083, thể hiện khó khăn trong nhận diện các phương tiện có hình dạng tương tự car hoặc bus.
 
-- **Car:** Là lớp có hiệu quả tốt nhất trong bốn lớp, với Recall 0.637 và mAP50 khoảng 0.740. Mô hình đã học được tương đối tốt đặc điểm của ô tô con.
-- **Truck:** Recall chỉ đạt 0.200, cho thấy khả năng phát hiện đầy đủ xe tải còn hạn chế.
-- **Bus:** Recall bằng 0.000, thấp nhất trong bốn lớp. Tập eval chỉ có hai đối tượng bus nên chỉ số này cần được diễn giải thận trọng.
-- **Van:** Recall đạt 0.083, thể hiện khó khăn trong việc phát hiện và phân biệt van với các phương tiện có hình dạng tương tự.
+Tập eval chỉ gồm 10 ảnh, trong đó một số lớp có rất ít đối tượng. Vì vậy, kết quả từng lớp còn chịu ảnh hưởng lớn của kích thước tập dữ liệu và không nên dùng để kết luận hiệu năng tổng quát của mô hình trên mọi điều kiện giao thông.
 
-Nhìn chung, mô hình hoạt động tốt hơn trên lớp car nhưng chưa ổn định đối với những lớp ít đối tượng.
+### 5.5. Minh chứng huấn luyện
 
-### 5.4. Minh chứng thực nghiệm
+**Biểu đồ huấn luyện 50 epochs**
 
-**Biểu đồ quá trình huấn luyện**
-
-![Biểu đồ kết quả huấn luyện](assets/yolo26_runs/vehicle_annotation/results.png)
+![Training Results](assets/yolo26_runs/vehicle_annotation/results.png)
 
 **Confusion matrix**
 
@@ -220,151 +321,162 @@ Nhìn chung, mô hình hoạt động tốt hơn trên lớp car nhưng chưa �
 
 **Precision–Recall Curve**
 
-![Precision–Recall Curve](assets/yolo26_runs/vehicle_annotation/BoxPR_curve.png)
+![PR Curve](assets/yolo26_runs/vehicle_annotation/BoxPR_curve.png)
 
-**Một số ảnh dự đoán trên tập eval**
+**Ảnh dự đoán trên tập eval**
 
-![Dự đoán drive_051](assets/eval_predictions/visuals/drive_051.jpg)
+![Prediction drive_051](assets/eval_predictions/visuals/drive_051.jpg)
 
-![Dự đoán drive_053](assets/eval_predictions/visuals/drive_053.jpg)
+![Prediction drive_053](assets/eval_predictions/visuals/drive_053.jpg)
 
-![Dự đoán drive_056](assets/eval_predictions/visuals/drive_056.jpg)
+![Prediction drive_056](assets/eval_predictions/visuals/drive_056.jpg)
 
 Các minh chứng bổ sung:
 
-- [Kết quả theo epoch — results.csv](assets/yolo26_runs/vehicle_annotation/results.csv)
+- [Log huấn luyện results.csv](assets/yolo26_runs/vehicle_annotation/results.csv)
 - [Confusion matrix chuẩn hóa](assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png)
-- [Precision–Confidence Curve](assets/yolo26_runs/vehicle_annotation/BoxP_curve.png)
-- [Recall–Confidence Curve](assets/yolo26_runs/vehicle_annotation/BoxR_curve.png)
-- [F1–Confidence Curve](assets/yolo26_runs/vehicle_annotation/BoxF1_curve.png)
-- [Kết quả đánh giá mô hình — JSON](assets/model_eval_metrics.json)
+- [Precision Curve](assets/yolo26_runs/vehicle_annotation/BoxP_curve.png)
+- [Recall Curve](assets/yolo26_runs/vehicle_annotation/BoxR_curve.png)
+- [F1 Curve](assets/yolo26_runs/vehicle_annotation/BoxF1_curve.png)
+- [Validation Labels](assets/yolo26_runs/vehicle_eval/val_batch0_labels.jpg)
+- [Validation Predictions](assets/yolo26_runs/vehicle_eval/val_batch0_pred.jpg)
 
-### 5.5. Phân tích kết quả
+### 5.6. Nhận xét một ảnh dự đoán cụ thể
 
-Mặc dù mô hình hoàn thành huấn luyện 50 epochs, mAP50 và Recall tổng thể vẫn ở mức thấp.
+Tôi chọn ảnh `drive_051.jpg` để quan sát kết quả dự đoán.
 
-Một số yếu tố có thể ảnh hưởng:
+Trong ảnh giao thông ban đêm này, mô hình tạo bounding box cho một số ô tô đang di chuyển trên đường. Một phương tiện màu đỏ ở khu vực phía dưới ảnh được dự đoán là `van` với độ tin cậy cao, trong khi các phương tiện khác được mô hình dự đoán chủ yếu là `car`.
 
-- Bộ train chỉ gồm 50 ảnh, hạn chế độ đa dạng phương tiện và điều kiện quan sát.
-- Số lượng đối tượng giữa các lớp không cân bằng, trong đó car chiếm ưu thế.
-- Xe ở xa, nhỏ, bị che khuất hoặc có ánh sáng phức tạp gây khó khăn cho nhận diện.
-- Các loại phương tiện có đặc điểm hình học gần nhau, đặc biệt van, bus và truck.
-- Nhãn train vẫn còn những sai lệch được thể hiện qua kết quả Gold QC.
+Ví dụ này cho thấy mô hình đã học được đặc điểm nhận diện phương tiện và có khả năng tạo bounding box trên ảnh chưa được dùng để cập nhật trọng số huấn luyện.
 
-Kết quả cho thấy khả năng phát hiện và phân loại đối tượng phụ thuộc đáng kể vào chất lượng, số lượng và mức độ đa dạng của dữ liệu annotation.
+Tuy nhiên, nhãn dự đoán có độ tin cậy cao không đồng nghĩa chắc chắn đúng ground truth. Cần đối chiếu ảnh và nhãn eval để xác định chính xác các trường hợp True Positive, False Positive hoặc nhầm class.
 
-## 6. Trả lời câu hỏi phân tích
+Ở những ảnh có nhiều phương tiện nhỏ hoặc bị che khuất, mô hình vẫn có thể bỏ sót hoặc nhận diện nhầm đối tượng.
 
-### Câu 1. Lớp nào có Recall thấp nhất? Chỉ ra ảnh eval minh họa.
+### 5.7. Trả lời bốn câu hỏi phân tích
 
-Lớp **bus (class 2)** có Recall thấp nhất, bằng **0.000** trong log validation của checkpoint tốt nhất.
+**Câu 1. Lớp nào có Recall thấp nhất? Ảnh nào minh họa?**
 
-Tập eval gồm hai đối tượng bus và mô hình không ghi nhận True Positive cho lớp này ở kết quả validation tương ứng.
+Theo log validation, lớp `bus` có Recall thấp nhất, bằng 0.000.
 
-Có thể sử dụng ảnh `drive_053.jpg` để minh họa các phương tiện bus trong cảnh giao thông, kết hợp đối chiếu giữa nhãn thực tế và ảnh dự đoán để phân tích các trường hợp phát hiện hoặc phân loại chưa chính xác.
+Tập eval có hai đối tượng bus. Kết quả cho thấy mô hình chưa ghi nhận True Positive cho lớp này theo điều kiện đánh giá tương ứng.
 
-Minh chứng:
+Tôi sử dụng ảnh `drive_053.jpg` và các ảnh validation labels/predictions để đối chiếu trường hợp phương tiện bus trong tập eval.
 
-- [Ảnh dự đoán drive_053](assets/eval_predictions/visuals/drive_053.jpg)
-- [Validation labels](assets/yolo26_runs/vehicle_annotation/val_batch0_labels.jpg)
-- [Validation predictions](assets/yolo26_runs/vehicle_annotation/val_batch0_pred.jpg)
+Để xác định một dự đoán bus có đúng hay không, cần kiểm tra cả class và độ trùng khớp IoU với nhãn ground truth. Một box được hiển thị với tên `bus` không tự động được tính là True Positive.
 
-Lưu ý rằng một nhãn bus xuất hiện trong ảnh dự đoán không nhất thiết được tính là True Positive nếu không đáp ứng đồng thời điều kiện đúng class và IoU của phép đánh giá.
+**Câu 2. Nếu mAP50 cao nhưng mAP50–95 thấp, cần kiểm tra điều gì trên bounding box?**
 
-### Câu 2. Nếu mAP50 cao nhưng mAP50–95 thấp, bounding box đang gặp vấn đề gì?
+mAP50 sử dụng ngưỡng IoU 0.50, còn mAP50–95 là giá trị trung bình qua nhiều ngưỡng IoU từ 0.50 đến 0.95.
 
-mAP50 đo chất lượng phát hiện với ngưỡng IoU 0.50, trong khi mAP50–95 lấy trung bình nhiều ngưỡng IoU từ 0.50 đến 0.95.
+Khi mAP50 cao hơn mAP50–95, cần xem xét độ chính xác hình học của bounding box:
 
-Khi mAP50 lớn hơn đáng kể mAP50–95, một nguyên nhân có thể là mô hình đã xác định được khu vực chứa đối tượng nhưng tọa độ bounding box chưa đủ chính xác ở các ngưỡng IoU cao.
+- Box có bị lệch so với đối tượng hay không.
+- Box có quá rộng hoặc quá hẹp hay không.
+- Box có ôm sát phần phương tiện cần nhận diện hay không.
+- Có trường hợp box chồng lấn nhiều phương tiện hay không.
 
-Trong thực nghiệm này:
+Kết quả của tôi có mAP50 = 0.2723 và mAP50–95 = 0.2017. Sự chênh lệch cho thấy hiệu quả giảm khi áp dụng các ngưỡng IoU khắt khe hơn, nhưng chưa đủ để quy toàn bộ nguyên nhân cho sai số tọa độ box.
 
-- mAP50 = 0.2723.
-- mAP50–95 = 0.2017.
+**Câu 3. Lỗi class nào có thể liên quan đến guideline? Dữ kiện nào hỗ trợ nhận xét?**
 
-Sự chênh lệch cho thấy hiệu năng giảm khi áp dụng các yêu cầu khắt khe hơn về độ trùng khớp, mặc dù kết quả còn chịu ảnh hưởng của cả độ tin cậy dự đoán và khả năng phân loại.
+Những nhóm dễ gây nhầm lẫn trong bài toán gồm:
 
-### Câu 3. Có lỗi phân biệt truck/bus/van/car nào liên quan đến guideline không?
+- `van` và `bus`: đặc biệt ở minibus hoặc phương tiện chở khách nhỏ.
+- `van` và `car`: do hình dáng một số xe MPV/SUV tương tự van.
+- `car` và `truck`: cần phân biệt theo guideline; xe bán tải thông thường thuộc `car`, không phải `truck`.
 
-Có. Một số nhóm phương tiện có hình dạng tương tự, dẫn đến nguy cơ nhầm lẫn:
+Dữ kiện hỗ trợ nhận xét là kết quả Recall theo từng lớp, confusion matrix và các ảnh dự đoán trên tập eval.
 
-- `van` với `bus` ở các phương tiện minibus.
-- `van` với `car` ở các xe MPV hoặc xe thân kín.
-- `car` với `truck` ở ranh giới xe chở hàng nhẹ; theo `GUIDELINE_MINI.md`, xe bán tải thông thường thuộc `car` (không phải `truck`).
-- `truck` với `bus` trong các cảnh có góc quan sát hoặc độ phân giải hạn chế.
+Cụ thể, lớp `car` có Recall 0.637, trong khi `truck` đạt 0.200, `bus` đạt 0.000 và `van` đạt 0.083. Điều này cho thấy khả năng nhận diện của mô hình không đồng đều giữa các lớp.
 
-Theo guideline, cần quan sát cấu trúc thân xe và các đặc điểm có thể nhận diện trước khi quyết định class. Không tự suy đoán phương tiện quá mờ hoặc bị che khuất nghiêm trọng.
+Tuy nhiên, chỉ số Recall thấp không tự chứng minh lỗi xuất phát từ guideline. Muốn xác định nguyên nhân cần đối chiếu các trường hợp cụ thể với ground truth và ảnh gốc.
 
-Những trường hợp chưa nhất quán trong annotation có thể ảnh hưởng đến quá trình mô hình học các đặc trưng phân loại.
+**Câu 4. Vì sao không dùng 10 ảnh eval để train? Vai trò validation của chúng là gì?**
 
-### Câu 4. Vì sao không dùng 10 ảnh eval để train dù đã có nhãn?
+Mười ảnh eval được giữ riêng với tập train nhằm đánh giá mô hình trên những ảnh không được sử dụng trực tiếp để cập nhật trọng số.
 
-Tập eval được giữ riêng nhằm đánh giá chất lượng dự đoán của mô hình trên những ảnh không được sử dụng trực tiếp để cập nhật trọng số trong quá trình train.
+Nếu đưa các ảnh này vào train, mô hình có thể học đặc điểm của chính các ảnh dùng để đánh giá, làm cho các chỉ số trở nên lạc quan và giảm tính khách quan.
 
-Nếu đưa các ảnh eval vào train, mô hình có thể học thuộc đặc điểm của chúng, khiến kết quả đánh giá trở nên lạc quan và không phản ánh đúng khả năng tổng quát.
+Trong notebook, tập eval còn được sử dụng để validation và lựa chọn checkpoint `best.pt`.
 
-Vì vậy, tôi giữ nguyên cách chia:
+Do đó, kết quả trên 10 ảnh eval là kết quả validation, không phải phép đánh giá trên một tập test độc lập hoàn toàn.
 
-- 50 ảnh train để huấn luyện.
-- 10 ảnh eval để validation và đánh giá theo notebook.
+Tôi giữ nguyên cách chia 50 ảnh train và 10 ảnh eval theo yêu cầu bài thực hành.
 
-Do tập eval cũng được sử dụng để lựa chọn checkpoint tốt nhất, cần tránh coi đây là một tập test độc lập.
+## 6. Khó khăn và cách xử lý
 
-## 7. Khó khăn, kết quả đạt được và tự đánh giá
+| Bước/thời điểm | Lỗi quan sát | Cách đã thử | Kết quả/còn thiếu |
+|---|---|---|---|
+| Gán nhãn trên CVAT | Một số xe nhỏ, bị che khuất hoặc nằm gần nhau gây khó khăn khi tạo box | Phóng to ảnh, xem ảnh gốc và rà soát từng phương tiện | Hoàn thành 50 file nhãn nhưng một số trường hợp vẫn khó phân biệt |
+| Kiểm tra annotation | Box trùng, box lệch hoặc nhầm giữa các class | Rà lại ảnh trên CVAT, chỉnh box và class theo guideline | Bộ nhãn đạt yêu cầu cấu trúc YOLO |
+| Gold QC | Precision và F1 còn thấp, FP cao | Chạy evaluator, phân tích ảnh sai lệch và thực hiện rework | F1 = 0.5333, Mean IoU = 0.8446; chưa đạt ngưỡng F1 gốc |
+| Huấn luyện trên Colab | Cần bảo đảm dữ liệu train và eval đúng phiên bản | Sử dụng commit nhãn hoàn thiện, kiểm tra số lượng ảnh trước khi train | Train thành công 50 epochs trên GPU Tesla T4 |
+| Đánh giá mô hình | Recall thấp ở các lớp ít đối tượng, đặc biệt bus và van | Xem metrics, confusion matrix, ảnh validation và prediction | Đã xác định các hạn chế; chưa thực hiện một lần huấn luyện cải thiện riêng |
+| Tổng hợp bài nộp | Kết quả Colab nằm ngoài repository | Tải ZIP kết quả, giải nén và đưa minh chứng vào thư mục báo cáo | Đã đưa ảnh prediction, log train và metrics lên GitHub |
 
-### 7.1. Khó khăn và cách xử lý
+## 7. Tự đánh giá theo rubric
 
-| Vấn đề | Cách xử lý | Kết quả |
+Tôi đối chiếu kết quả thực hiện với các nhóm tiêu chí trong `RUBRIC.md`.
+
+| Tiêu chí | Kết quả thực hiện | Tự đánh giá |
 |---|---|---|
-| Sai lệch annotation và FP cao | Kiểm tra lại bounding box, class và các đối tượng ngoài phạm vi | F1 đạt 0.5333, Mean IoU đạt 0.8446 |
-| Xe nhỏ, xa, che khuất | Quan sát ảnh gốc và áp dụng guideline khi gán nhãn | Cải thiện một phần chất lượng nhãn nhưng vẫn còn sai lệch |
-| Nhầm car, truck, bus, van | Kiểm tra đặc điểm phương tiện và rà các trường hợp mơ hồ | Một số lỗi được sửa, chưa loại bỏ hoàn toàn nhầm lớp |
-| Kết quả YOLO26n chưa cao | Giữ đúng split dữ liệu, đánh giá từng class và phân tích kết quả | mAP50 đạt 0.2723, mAP50–95 đạt 0.2017 |
+| Định dạng nhãn YOLO | Đủ 50/50 file, đúng cấu trúc năm trường và class ID | Đạt yêu cầu cấu trúc |
+| Độ đầy đủ đối tượng | Annotation Recall = 0.7228 | Vẫn còn đối tượng bị bỏ sót hoặc chưa ghép đúng |
+| Độ chính xác bounding box | Mean IoU of matches = 0.8446 | Đạt ngưỡng hình học của evaluator |
+| Tính nhất quán class | Còn nhầm lẫn giữa các loại xe tương tự | Cần cải thiện |
+| Mini guideline | Có định nghĩa bốn lớp và ba trường hợp mơ hồ | Đã thực hiện |
+| Gold QC và rework | F1 = 0.5333; Mean IoU = 0.8446 | Mean IoU đạt, F1 chưa đạt ngưỡng gốc |
+| Pipeline YOLO | Train đủ 50 epochs trên Colab, có log và metrics | Đã thực hiện |
+| Phân tích kết quả | Có nhận xét từng lớp và trả lời bốn câu hỏi | Đã thực hiện |
+| Minh chứng bài nộp | Có notebook, ảnh prediction và biểu đồ đánh giá | Đã bổ sung trên GitHub |
 
-### 7.2. Tự đánh giá theo các nhóm tiêu chí rubric
+### Nhận xét chung
 
-| Nhóm tiêu chí | Kết quả thực hiện |
-|---|---|
-| Định dạng và cấu trúc YOLO | Đạt cấu trúc 50/50 file |
-| Độ đầy đủ đối tượng | Recall annotation 0.7228; vẫn có FN |
-| Độ chính xác hình học | Mean IoU của các match 0.8446 |
-| Tính nhất quán phân lớp | Còn một số nhầm lẫn car/truck/bus/van |
-| Mini guideline | Có quy tắc và ba trường hợp khó |
-| Gold-set QC | F1 0.5333, Mean IoU 0.8446; evaluator trả `passed=false` theo ngưỡng gốc |
-| Huấn luyện và đánh giá YOLO26n | Hoàn thành 50 epochs, có metrics, biểu đồ và 10 ảnh dự đoán |
+Qua bài thực hành, tôi đã hoàn thành quy trình từ xây dựng guideline, gán nhãn và kiểm tra dữ liệu đến huấn luyện mô hình Object Detection.
 
-Bảng này chỉ tổng hợp mức độ hoàn thành, không tự quy đổi thành điểm chính thức của giảng viên.
+**Kết quả đạt được:**
 
-### 7.3. Kết luận
+- Hoàn thành 50/50 file nhãn YOLO.
+- Xây dựng mini guideline và ghi nhận ba trường hợp mơ hồ.
+- Hoàn thành kiểm tra cấu trúc và Gold QC.
+- Lưu lại commit nhãn ban đầu và phiên bản sau rework.
+- Huấn luyện YOLO26n thành công trong 50 epochs trên GPU Tesla T4.
+- Thực hiện validation và prediction trên 10 ảnh eval.
+- Tổng hợp metrics, ảnh dự đoán, biểu đồ và báo cáo lên GitHub.
 
-Qua bài thực hành, tôi đã thực hiện quy trình từ gán nhãn ảnh giao thông, kiểm tra cấu trúc YOLO, đánh giá chất lượng annotation đến huấn luyện và đánh giá mô hình YOLO26n.
+**Những hạn chế:**
 
-Bộ nhãn hoàn thành đủ 50 ảnh và đạt yêu cầu cấu trúc. Kết quả Gold QC có F1 = 0.5333 và Mean IoU = 0.8446. Sau đó, mô hình YOLO26n được huấn luyện trong 50 epochs trên Google Colab với GPU Tesla T4.
+- F1 annotation chưa đạt ngưỡng 0.80 của evaluator gốc.
+- Số lượng ảnh train nhỏ và phân bố đối tượng giữa các lớp không đồng đều.
+- Khả năng nhận diện bus, van và truck còn hạn chế.
+- Chưa có tập test độc lập để đánh giá sâu hơn khả năng tổng quát của mô hình.
+- Chưa thực hiện thí nghiệm mở rộng dữ liệu và huấn luyện lại để so sánh mức cải thiện.
 
-Trên tập validation 10 ảnh, mô hình đạt mAP50 = 0.2723 và mAP50–95 = 0.2017. Lớp car có kết quả tốt nhất, trong khi truck, bus và van còn hạn chế.
+Thông qua bài thực hành, tôi hiểu rõ hơn vai trò của chất lượng dữ liệu annotation, sự nhất quán class và việc kiểm tra kết quả mô hình bằng nhiều chỉ số thay vì chỉ dựa vào một metric.
 
-Qua kết quả thực nghiệm, tôi nhận thấy chất lượng annotation, độ cân bằng giữa các lớp và sự đa dạng của dữ liệu đóng vai trò quan trọng đối với khả năng phát hiện đối tượng. Đây là những hướng cần tiếp tục cải thiện nếu mở rộng bài thực hành.
-
-## 8. Công cụ hỗ trợ và tài liệu tham khảo
+## 8. Công cụ AI và tài liệu tham khảo
 
 ### 8.1. Công cụ sử dụng
 
-- **CVAT:** Gán nhãn và chỉnh sửa bounding box.
-- **Python:** Kiểm tra cấu trúc, xử lý dữ liệu và đánh giá annotation.
-- **Ultralytics YOLO26n:** Huấn luyện và đánh giá mô hình Object Detection.
-- **Google Colab:** Môi trường thực thi notebook trên GPU.
-- **Git/GitHub:** Quản lý phiên bản và lưu trữ bài nộp.
+Trong quá trình thực hiện, tôi sử dụng:
 
-Tôi thực hiện và rà soát phần annotation trên CVAT, trực tiếp chạy notebook huấn luyện trên Colab, kiểm tra các chỉ số thực nghiệm và chịu trách nhiệm về kết quả được nộp.
+- **CVAT:** Gán nhãn, quan sát ảnh và chỉnh sửa bounding box.
+- **Python:** Kiểm tra định dạng nhãn và đánh giá annotation.
+- **Google Colab:** Thực thi notebook huấn luyện mô hình.
+- **Ultralytics YOLO26n:** Huấn luyện, validation và prediction.
+- **Git/GitHub:** Quản lý các phiên bản dữ liệu và lưu trữ kết quả bài thực hành.
+
+Tôi trực tiếp kiểm tra và chỉnh sửa nhãn trên CVAT, chạy notebook trên Google Colab, xem các ảnh prediction và đối chiếu các chỉ số với file kết quả.
 
 ### 8.2. Tài liệu tham khảo
 
-1. `GUIDE.md` — Hướng dẫn thực hiện bài lab.
-2. `RULES.md` — Quy định thực hành.
-3. `CHECKPOINTS.md` — Các mốc kiểm tra.
-4. `SUBMISSION.md` — Quy định nộp bài.
+1. `GUIDE.md` — Hướng dẫn thực hành Day 2.
+2. `RULES.md` — Quy định thực hiện bài.
+3. `CHECKPOINTS.md` — Các checkpoint của bài thực hành.
+4. `SUBMISSION.md` — Yêu cầu và quy định nộp bài.
 5. `RUBRIC.md` — Tiêu chí đánh giá.
-6. `GUIDELINE_MINI.md` — Quy tắc gán nhãn và các trường hợp khó.
-7. [Ultralytics Documentation](https://docs.ultralytics.com/) — Tài liệu huấn luyện và đánh giá mô hình YOLO.
+6. `GUIDELINE_MINI.md` — Quy tắc và quyết định gán nhãn.
+7. [Ultralytics Documentation](https://docs.ultralytics.com/) — Tài liệu huấn luyện và đánh giá YOLO.
 
-**Cam kết dữ liệu:** Không đưa Gold Set, thông tin bảo mật hoặc checkpoint `.pt` vào repository nộp bài. Các chỉ số được trình bày theo kết quả đánh giá thực tế, không thay đổi kết quả evaluator để tạo trạng thái đạt giả.
+Tôi giữ nguyên các kết quả đánh giá thực tế, không thay đổi evaluator hoặc số liệu để tạo kết quả đạt. Gold Set, checkpoint `.pt`, mật khẩu và token không được đưa vào repository bài nộp.
